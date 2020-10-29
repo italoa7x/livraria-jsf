@@ -1,0 +1,73 @@
+<ui:composition template="WEB-INF/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+	<ui:param name="title" value="Livraria DAC - Registro de usuario" />
+
+	<ui:define name="titulo">Registro de usuario</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formRegistro">
+			<h:messages id="msg" />
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Nome:" />
+				<h:inputText id="nome" value="#{usuarioBean.usuario.nome}"
+					required="true" />
+
+				<h:outputLabel value="E-mail:" />
+				<h:inputText id="email" value="#{usuarioBean.usuario.email}"
+					required="true">
+					<f:validateLength minimum="4" maximum="150"></f:validateLength>
+				</h:inputText>
+
+				<h:outputLabel value="Senha:" />
+				<h:inputSecret id="senha" value="#{usuarioBean.usuario.senha}"
+					required="true">
+				</h:inputSecret>
+			</h:panelGrid>
+			<fieldset>
+				<legend>Papel do Usuário</legend>
+
+				<h:outputLabel value="Papel:" />
+				<h:selectOneMenu value="#{usuarioBean.papel}" id="papelMenu">
+					<f:selectItem itemLabel="Administrador Gerente"
+						itemValue="ADMIN_GERENTE" />
+					<f:selectItem itemLabel="Administrador Basico"
+						itemValue="ADMIN_BASICO" />
+					<f:selectItem itemLabel="Cliente" itemValue="CLIENTE" />
+				</h:selectOneMenu>
+
+				<h:commandButton value="Adiciona papel"
+					action="#{usuarioBean.adicionaPapel}">
+					<f:ajax execute="papelMenu" render="papeisUsuarioHTML msg"></f:ajax>
+				</h:commandButton>
+				<br />
+				<ol jsf:id="papeisUsuarioHTML">
+					<ui:repeat var="papel" value="#{usuarioBean.papeisUsuario}">
+						<li>#{papel}</li>
+					</ui:repeat>
+				</ol>
+
+			</fieldset>
+
+			<h:commandButton value="Registrar" action="#{usuarioBean.cadastra}">
+				<f:ajax execute="@form" render=":usuarios msg" />
+			</h:commandButton>
+
+		</h:form>
+
+		<h3>Usuarios</h3>
+
+		<h:dataTable id="usuarios" value="#{usuarioBean.usuarios}"
+			var="usuario">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+					#{usuario.nome}
+    			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+	<h:messages id="msg" />
+	<h:panelGrid columns="3">
+		<h:outputLabel value="Título:" />
+		<h:inputText id="titulo" label="titulo"
+			value="#{livroBean.livro.titulo}" required="true">
+			<f:validateLength minimum="3" maximum="255"></f:validateLength>
+			<f:ajax event="blur" render="msg"></f:ajax>
+		</h:inputText>
+		<h:message for="titulo" />
+		<h:outputLabel value="Isbn:" />
+		<h:inputText id="isbn" label="isbn" value="#{livroBean.livro.isbn}"
+			required="true"
+			validatorMessage="O ISBN deve conter 5 dígitos numéricos">
+			<f:validateRegex pattern="[0-9]{5}"></f:validateRegex>
+			<f:ajax event="blur" render="msg"></f:ajax>
+		</h:inputText>
+		<h:message for="isbn" />
+		<h:outputLabel value="Preço:" />
+		<h:inputText id="preco" label="preco" value="#{livroBean.livro.preco}"
+			required="true">
+			<f:convertNumber minFractionDigits="2" maxFractionDigits="3"
+				locale="pt_BR" />
+			<f:validateDoubleRange minimum="1.1" maximum="4999.99"></f:validateDoubleRange>
+			<f:ajax event="blur" render="msg"></f:ajax>
+		</h:inputText>
+		<h:message for="preco" />
+		<h:outputLabel value="Data de lançamento:" />
+		<h:inputText id="data" label="data"
+			value="#{livroBean.livro.dataLancamento}" required="true">
+			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+				timeZone="America/Recife" />
+		</h:inputText>
+		<h:message for="data" />
+	</h:panelGrid>
+
+	<fieldset>
+		<legend>Dados do Autor</legend>
+
+		<h:outputLabel value="Autor:" />
+		<h:selectOneMenu value="#{livroBean.autorId}" id="autorMenu">
+			<f:selectItems value="#{livroBean.autores}" var="autor"
+				itemLabel="#{autor.nome}" itemValue="#{autor.id}">
+			</f:selectItems>
+		</h:selectOneMenu>
+
+		<h:commandButton value="Adiciona autor"
+			action="#{livroBean.adicionaAutorLivro}">
+			<f:ajax execute="autorMenu"
+				render="autoresLivro autoresLivroHTML msg"></f:ajax>
+		</h:commandButton>
+		<br />
+		<h:commandLink action="autores?faces-redirect=true"
+			value="Cadastrar novo autor" immediate="true" />
+		<br />
+		<ol jsf:id="autoresLivroHTML">
+			<ui:repeat var="autor" value="#{livroBean.autoresLivro}">
+				<li>#{autor.nome}</li>
+			</ui:repeat>
+		</ol>
+
+	</fieldset>
+
+
+</ui:composition>

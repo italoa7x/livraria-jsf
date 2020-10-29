@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:jsf="http://xmlns.jcp.org/jsf"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h3>Livros</h3>
+
+	<h:dataTable id="livros" value="#{livroBean.livros}" var="livro">
+				<h:column>
+			<f:facet name="header">Titulo</f:facet>
+					#{livro.titulo}
+    	</h:column>
+    	<h:column>
+			<f:facet name="header">Isbn</f:facet>
+					#{livro.isbn}
+    	</h:column>
+    	<h:column>
+			<f:facet name="header">Preço</f:facet>
+			<h:outputLabel value="#{livro.preco}">
+				<f:convertNumber type="currency" locale="pt_BR"/>
+			</h:outputLabel>
+    	</h:column>
+    	<h:column>
+			<f:facet name="header">Data</f:facet>
+			<h:outputLabel value="#{livro.dataLancamento}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt_BR"/>
+			</h:outputLabel>
+    	</h:column>
+    	<c:if test="#{not empty request.userPrincipal}">
+    	<h:column>
+			<h:link value="Editar" outcome="editarLivro">
+				<f:param name="id" value="#{livro.id}"></f:param>			
+			</h:link>
+    	</h:column>
+    	</c:if>
+	</h:dataTable>
+
+
+</ui:composition>
